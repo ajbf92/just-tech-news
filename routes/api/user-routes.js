@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
   User.findAll({
     // used Attribute key and instructed the query to exclude the password column.
     // It's in an array because if we want to exclude more than one, we can just add more.
-    attributes: { exclude: ['password'] }
+    // attributes: { exclude: ['password'] }
   })
   .then(dbUserData => res.json(dbUserData))
   .catch(err => {
@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
     // Access our User model and run .findOne() method
     User.findOne({
-      attributes: { exclude: ['password'] },
+      // attributes: { exclude: ['password'] },
         where: {
           id: req.params.id
         }
@@ -59,6 +59,10 @@ router.put('/:id', (req, res) => {
 
   // if req.body has exact key/value pairs to match the model, you can just use `req.body` instead
   User.update(req.body, {
+    // Before we can check to see if this hook is effective however, we must add an option to the 
+    // query call. According to the Sequelize documentation regarding the beforeUpdate (Links to an 
+    // external site.), we will need to add the option { individualHooks: true }.
+    individualHooks: true,
     where: {
       id: req.params.id
     }
